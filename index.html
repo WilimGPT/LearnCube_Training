@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LearnCube Training</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  /* ─── TOKENS ─────────────────────────────────────────────── */
+  :root {
+    --blue:        #328ccc;
+    --blue-dark:   #1f6fa8;
+    --blue-light:  #e8f4fc;
+    --orange:      #f15a22;
+    --orange-light:#f3793d;
+    --orange-deep: #ef4523;
+    --text:        #2e2e2e;
+    --text-light:  #5a5a6a;
+    --bg:          #ffffff;
+    --bg-soft:     #f7f9fc;
+    --border:      #e2eaf2;
+    --radius:      12px;
+    --radius-lg:   20px;
+    --shadow:      0 4px 24px rgba(50,140,204,0.10);
+    --shadow-lg:   0 12px 48px rgba(50,140,204,0.16);
+    --font-head:   'DM Serif Display', Georgia, serif;
+    --font-body:   'DM Sans', system-ui, sans-serif;
+    --max:         1140px;
+    --nav-h:       72px;
+  }
+
+  /* ─── RESET ──────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+
+  /* ─── UTILITIES ──────────────────────────────────────────── */
+  .container { max-width: var(--max); margin: 0 auto; padding: 0 32px; }
+  .section    { padding: 96px 0; }
+  .section--soft { background: var(--bg-soft); }
+  .section--blue { background: var(--blue); color: #fff; }
+  .section--dark { background: #0f1e2e; color: #fff; }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 14px;
+  }
+  .section--blue .eyebrow,
+  .section--dark .eyebrow { color: var(--orange-light); }
+
+  h1,h2,h3,h4 { font-family: var(--font-head); line-height: 1.2; color: var(--text); }
+  .section--blue h1,
+  .section--blue h2,
+  .section--blue h3,
+  .section--dark h2,
+  .section--dark h3 { color: #fff; }
+
+  .h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); }
+  .h2 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); }
+  .h3 { font-size: clamp(1.3rem, 2.5vw, 1.7rem); }
+
+  .lead {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    max-width: 620px;
+    line-height: 1.75;
+  }
+  .section--blue .lead,
+  .section--dark .lead { color: rgba(255,255,255,0.82); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: .95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform .18s, box-shadow .18s, background .18s;
+    border: none;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn--primary {
+    background: var(--orange);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(241,90,34,.35);
+  }
+  .btn--primary:hover { background: var(--orange-deep); box-shadow: 0 8px 24px rgba(241,90,34,.4); }
+  .btn--ghost {
+    background: transparent;
+    color: var(--blue);
+    border: 2px solid var(--blue);
+  }
+  .btn--ghost:hover { background: var(--blue-light); }
+  .btn--ghost-white {
+    background: transparent;
+    color: #fff;
+    border: 2px solid rgba(255,255,255,.55);
+  }
+  .btn--ghost-white:hover { background: rgba(255,255,255,.12); border-color: #fff; }
+
+  .cta-row { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-top: 32px; }
+  .link-arrow {
+    font-weight: 600;
+    color: var(--blue);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: gap .18s;
+  }
+  .link-arrow:hover { gap: 10px; }
+  .section--blue .link-arrow,
+  .section--dark .link-arrow { color: rgba(255,255,255,.9); }
+
+  /* ─── NAV ─────────────────────────────────────────────────── */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: var(--nav-h);
+    background: rgba(255,255,255,.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+  }
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .nav__logo {
+    font-family: var(--font-head);
+    font-size: 1.3rem;
+    color: var(--blue);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .nav__logo-mark {
+    width: 36px;
+    height: 36px;
+    background: var(--blue);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: var(--font-body);
+    flex-shrink: 0;
+  }
+  .nav__links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    list-style: none;
+  }
+  .nav__links a {
+    font-size: .9rem;
+    font-weight: 500;
+    color: var(--text-light);
+    transition: color .15s;
+  }
+  .nav__links a:hover { color: var(--blue); }
+  .nav__cta { margin-left: 16px; padding: 10px 22px; font-size: .9rem; }
+
+  /* ─── HERO ────────────────────────────────────────────────── */
+  .hero {
+    padding: 96px 0 80px;
+    background: linear-gradient(135deg, #f7f9fc 0%, #e8f4fc 60%, #fef0ea 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(50,140,204,.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 30%;
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(241,90,34,.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero__inner {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 64px;
+    align-items: start;
+  }
+  .hero__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--blue-light);
+    border: 1px solid rgba(50,140,204,.25);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--blue);
+    margin-bottom: 24px;
+  }
+  .hero__label-dot {
+    width: 8px; height: 8px;
+    background: var(--orange);
+    border-radius: 50%;
+  }
+  .hero h1 { margin-bottom: 24px; color: var(--text); }
+  .hero h1 em { font-style: italic; color: var(--blue); }
+
+  /* Stats card */
+  .stats-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 32px;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .stats-card__title {
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .stats-card__title span { color: var(--blue); }
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-label { font-size: .875rem; color: var(--text-light); }
+  .stat-value { font-family: var(--font-head); font-size: 1.3rem; color: var(--blue); }
+  .stats-card__badge {
+    margin-top: 24px;
+    background: linear-gradient(135deg, var(--orange), var(--orange-deep));
+    color: #fff;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: .8rem;
+    font-weight: 600;
+    text-align: center;
+    letter-spacing: .04em;
+  }
+
+  /* ─── PARTNER STRIP ───────────────────────────────────────── */
+  .partner-strip {
+    background: var(--blue);
+    padding: 20px 0;
+    overflow: hidden;
+  }
+  .partner-strip__inner {
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    white-space: nowrap;
+    color: rgba(255,255,255,.9);
+    font-size: .85rem;
+    font-weight: 500;
+  }
+  .partner-strip__sep {
+    color: rgba(255,255,255,.35);
+    font-size: 1.2rem;
+  }
+  .partner-strip__badge {
+    background: var(--orange);
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  /* ─── SECTION 1 – BABBEL CONNECTION ──────────────────────── */
+  .section1__header { text-align: center; max-width: 700px; margin: 0 auto 64px; }
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-bottom: 48px;
+  }
+  .pillar-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px 28px;
+    position: relative;
+    transition: box-shadow .2s, transform .2s;
+  }
+  .pillar-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+  .pillar-card__num {
+    font-family: var(--font-head);
+    font-size: 2.5rem;
+    color: var(--blue-light);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .pillar-card h3 { font-size: 1.05rem; margin-bottom: 12px; }
+  .pillar-card p { font-size: .9rem; color: var(--text-light); line-height: 1.7; }
+
+  .callout-block {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+    border-radius: var(--radius-lg);
+    padding: 48px;
+    color: #fff;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .callout-block blockquote {
+    font-family: var(--font-head);
+    font-size: 1.5rem;
+    font-style: italic;
+    line-height: 1.4;
+    border-left: 3px solid var(--orange);
+    padding-left: 24px;
+  }
+  .callout-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+  .tag {
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: .82rem;
+    font-weight: 500;
+    color: rgba(255,255,255,.9);
+  }
+
+  /* ─── SECTION 2 – THE SOLUTION ───────────────────────────── */
+  .solution-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 56px;
+  }
+  .solution-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 36px 30px;
+    transition: box-shadow .2s, transform .2s;
+  }
+  .solution-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+  .solution-card__icon {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    display: block;
+  }
+  .solution-card h3 { font-size: 1.15rem; margin-bottom: 16px; }
+  .solution-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .solution-card ul li {
+    font-size: .875rem;
+    color: var(--text-light);
+    padding-left: 18px;
+    position: relative;
+    line-height: 1.55;
+  }
+  .solution-card ul li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 8px;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--orange);
+  }
+
+  /* ─── SECTION 3 – HR PAIN POINTS ─────────────────────────── */
+  .pain-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    margin-top: 56px;
+    align-items: start;
+  }
+  .pain-list { display: flex; flex-direction: column; gap: 20px; }
+  .pain-item {
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    font-size: .95rem;
+    font-style: italic;
+    color: rgba(255,255,255,.85);
+    position: relative;
+    padding-left: 48px;
+  }
+  .pain-item::before {
+    content: '"';
+    position: absolute;
+    left: 16px; top: 12px;
+    font-family: var(--font-head);
+    font-size: 2.5rem;
+    color: var(--orange-light);
+    line-height: 1;
+  }
+  .answer-list { display: flex; flex-direction: column; gap: 24px; }
+  .answer-item { display: flex; gap: 20px; align-items: start; }
+  .answer-num {
+    width: 36px; height: 36px;
+    background: var(--orange);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .8rem; font-weight: 700; color: #fff;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .answer-item h4 { font-family: var(--font-body); font-size: .95rem; font-weight: 600; color: #fff; margin-bottom: 4px; }
+  .answer-item p { font-size: .875rem; color: rgba(255,255,255,.75); line-height: 1.6; }
+
+  /* ─── SECTION 4 – BABBEL PARTNER ─────────────────────────── */
+  .babbel-intro {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 64px;
+    align-items: start;
+    margin-bottom: 64px;
+  }
+  .babbel-stats-table {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .babbel-stats-table table { width: 100%; border-collapse: collapse; }
+  .babbel-stats-table th {
+    background: var(--blue);
+    color: #fff;
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 14px 20px;
+    text-align: left;
+  }
+  .babbel-stats-table td {
+    padding: 14px 20px;
+    font-size: .9rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .babbel-stats-table tr:last-child td { border-bottom: none; }
+  .babbel-stats-table td:last-child { font-weight: 700; color: var(--blue); text-align: right; }
+  .babbel-stats-table tr:nth-child(even) td { background: var(--bg-soft); }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .feature-chip {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: .875rem;
+    font-weight: 500;
+    color: var(--text);
+    transition: border-color .18s, box-shadow .18s;
+  }
+  .feature-chip:hover { border-color: var(--blue); box-shadow: 0 2px 12px rgba(50,140,204,.12); }
+  .feature-chip__dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--orange);
+    flex-shrink: 0;
+  }
+
+  /* ─── CTA SECTION ─────────────────────────────────────────── */
+  .cta-section {
+    padding: 96px 0;
+    background: linear-gradient(135deg, #0f1e2e 0%, #1a3550 100%);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: -100px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(50,140,204,.2) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .cta-section h2 { color: #fff; margin-bottom: 16px; }
+  .cta-section p { color: rgba(255,255,255,.72); max-width: 500px; margin: 0 auto; font-size: 1rem; }
+  .cta-section .cta-row { justify-content: center; margin-top: 40px; }
+
+  /* ─── FOOTER ──────────────────────────────────────────────── */
+  .footer {
+    background: #0a1620;
+    padding: 48px 0 32px;
+    color: rgba(255,255,255,.55);
+  }
+  .footer__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .footer__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .footer__logo {
+    font-family: var(--font-head);
+    font-size: 1.15rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    list-style: none;
+  }
+  .footer__links a {
+    font-size: .85rem;
+    color: rgba(255,255,255,.55);
+    transition: color .15s;
+  }
+  .footer__links a:hover { color: #fff; }
+  .footer__bottom {
+    font-size: .8rem;
+    text-align: center;
+  }
+
+  /* ─── SECTION HEADERS UTILITY ─────────────────────────────── */
+  .section-header { margin-bottom: 56px; }
+  .section-header--center { text-align: center; }
+  .section-header--center .lead { margin: 0 auto; }
+
+  /* ─── RESPONSIVE ──────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .hero__inner,
+    .pillars-grid,
+    .solution-grid,
+    .pain-grid,
+    .babbel-intro,
+    .callout-block { grid-template-columns: 1fr; }
+    .nav__links { display: none; }
+    .section { padding: 64px 0; }
+    .callout-block { padding: 32px; }
+  }
+  @media (max-width: 600px) {
+    .container { padding: 0 20px; }
+    .hero { padding: 64px 0 56px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     NAV
+════════════════════════════════════════════════════════════ -->
+<nav class="nav">
+  <div class="container">
+    <div class="nav__inner">
+      <a href="#" class="nav__logo">
+        <div class="nav__logo-mark">LC</div>
+        LearnCube Training
+      </a>
+      <ul class="nav__links">
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#solution">Our Solution</a></li>
+        <li><a href="#babbel">Babbel Case Study</a></li>
+      </ul>
+      <a href="#book" class="btn btn--primary nav__cta">Book a Call</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero__inner">
+
+      <div class="hero__content">
+        <div class="hero__label">
+          <span class="hero__label-dot"></span>
+          Babbel Platinum Partner · 8 years
+        </div>
+        <h1 class="h1">Language connects.<br><em>Relationships last.</em><br>We deliver both.</h1>
+        <p class="lead" style="margin-top:20px;">
+          Not another faceless platform. Our team will know yours. You'll have a dedicated customer success manager, Babbel self-study combined with expert live teaching, and clear progress reporting you can show the board with confidence — while we handle everything your learners need before it ever reaches your desk.
+        </p>
+        <div class="cta-row">
+          <a href="#book" class="btn btn--primary">Book a Call</a>
+          <a href="#solution" class="link-arrow">See how it works →</a>
+        </div>
+      </div>
+
+      <div class="hero__aside">
+        <div class="stats-card">
+          <div class="stats-card__title">By the <span>Numbers</span></div>
+          <div class="stat-row">
+            <span class="stat-label">Babbel Platinum Partner</span>
+            <span class="stat-value">8 yrs</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Average class rating</span>
+            <span class="stat-value">4.6 / 5</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Teacher turnover rate</span>
+            <span class="stat-value">&lt;10%</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Average partner tenure</span>
+            <span class="stat-value">4.5 yrs</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Platform uptime</span>
+            <span class="stat-value">99.9%</span>
+          </div>
+          <div class="stats-card__badge">✦ Exclusive Platinum Partner of Babbel</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PARTNER STRIP
+════════════════════════════════════════════════════════════ -->
+<div class="partner-strip">
+  <div class="container">
+    <div class="partner-strip__inner">
+      <span>LearnCube Training is the exclusive Platinum Partner of Babbel for Corporate Training</span>
+      <span class="partner-strip__sep">·</span>
+      <span class="partner-strip__badge">Babbel Platinum Partner</span>
+      <span class="partner-strip__sep">·</span>
+      <span>Trusted by 2,000+ companies worldwide</span>
+      <span class="partner-strip__sep">·</span>
+      <span>Founded 2007</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 1 – BABBEL CONNECTION
+════════════════════════════════════════════════════════════ -->
+<section class="section" id="about">
+  <div class="container">
+
+    <div class="section1__header">
+      <span class="eyebrow">You Already Know Us</span>
+      <h2 class="h2">If you use Babbel for Business,<br>you already know us.</h2>
+      <p class="lead" style="margin-top:16px;">
+        LearnCube has powered Babbel for Business behind the scenes for eight years as a white-label teaching provider. The teachers. The training infrastructure. The live teaching platform. Now you work with us directly — with the personal service you were missing.
+      </p>
+    </div>
+
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <div class="pillar-card__num">01</div>
+        <h3>Keep learning with our teachers</h3>
+        <p>After delivering over 100,000 classes on behalf of Babbel for Business, we know that learners who learn with a teacher, learn for longer — and the teacher is one of the stickiest aspects of their learning.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-card__num">02</div>
+        <h3>Keep using the Babbel App</h3>
+        <p>LearnCube Training is an official Babbel reseller so you don't have to switch to an inferior app. Babbel is an award-winning provider with over 14 years' experience — 75% of learners meet their learning goals.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-card__num">03</div>
+        <h3>Now get a more personal service</h3>
+        <p>There are much larger corporate language training providers. But do you need cheaper access to a platform your employees don't like? Do you want to be ticket #18739? Get the personal attention your organisation needs.</p>
+      </div>
+    </div>
+
+    <div class="callout-block">
+      <blockquote>"We measurably help your team speak with more confidence and clarity."</blockquote>
+      <div>
+        <p style="color:rgba(255,255,255,.82); font-size:.95rem; margin-bottom:24px;">
+          LearnCube Training is the mid-market alternative — personal, accountable, and powered by proven technology. We combine the world's best self-study app with high-quality teacher-led training and clear HR reporting. All from one partner who knows your name.
+        </p>
+        <div class="callout-tags">
+          <span class="tag">200–2,000 employee companies</span>
+          <span class="tag">Business English &amp; German</span>
+          <span class="tag">Germany &amp; United States</span>
+          <span class="tag">Export-oriented teams</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 2 – THE SOLUTION
+════════════════════════════════════════════════════════════ -->
+<section class="section section--soft" id="solution">
+  <div class="container">
+
+    <div class="section-header section-header--center">
+      <span class="eyebrow">The Solution</span>
+      <h2 class="h2">Three pillars. One accountable partner.</h2>
+      <p class="lead" style="margin-top:16px;">
+        Everything you need for a language training programme that actually works — measurable, reportable, and something you can be proud of.
+      </p>
+    </div>
+
+    <div class="solution-grid">
+
+      <div class="solution-card">
+        <span class="solution-card__icon">🤝</span>
+        <h3>Relationships That Last</h3>
+        <ul>
+          <li>8 years as a Babbel Platinum Partner</li>
+          <li>Average partner tenure of 4.5 years</li>
+          <li>Dedicated account manager from €5,000/year</li>
+          <li>Direct CEO &amp; CTO access from €25,000/year</li>
+          <li>Dedicated, non-freelance teachers with long-term commitment</li>
+          <li>Teacher turnover under 10%</li>
+        </ul>
+      </div>
+
+      <div class="solution-card">
+        <span class="solution-card__icon">⭐</span>
+        <h3>Personal Service, Built In</h3>
+        <ul>
+          <li>Learners have a direct support line — HR uninvolved in 95% of cases</li>
+          <li>Technical support included — IT team covered</li>
+          <li>First months of lessons scheduled on learners' behalf</li>
+          <li>Learner coordinators for VIP accounts</li>
+          <li>Free class credit if a teacher cancels</li>
+          <li>Any class rated below 3/5 is reviewed automatically</li>
+        </ul>
+      </div>
+
+      <div class="solution-card">
+        <span class="solution-card__icon">📊</span>
+        <h3>Measurable Results for HR</h3>
+        <ul>
+          <li>Central HR dashboard — app + teacher progress in one view</li>
+          <li>Track engagement, proficiency, and completion</li>
+          <li>CEFR-aligned level assessments included</li>
+          <li>Average class rating 4.6/5 across all sessions</li>
+          <li>GDPR-compliant reporting</li>
+          <li>Regular programme reviews and insight reports</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 3 – FOR HR & L&D LEADERS
+════════════════════════════════════════════════════════════ -->
+<section class="section section--blue" id="hr">
+  <div class="container">
+
+    <div class="section-header">
+      <span class="eyebrow">For HR &amp; L&D Leaders</span>
+      <h2 class="h2">We know what keeps you up at night.</h2>
+      <p class="lead">We've designed every part of our service around removing these problems from your desk.</p>
+    </div>
+
+    <div class="pain-grid">
+
+      <div>
+        <h3 style="color:#fff; font-size:1.1rem; margin-bottom:20px; font-family:var(--font-body); font-weight:600; text-transform:uppercase; letter-spacing:.08em; font-size:.8rem; opacity:.7;">The Pain Points</h3>
+        <div class="pain-list">
+          <div class="pain-item">Switching providers is a complete headache. It can take weeks.</div>
+          <div class="pain-item">Why am I the one spending an hour troubleshooting when something goes wrong?</div>
+          <div class="pain-item">I'm under increasing scrutiny to justify that every investment in training is working.</div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="color:#fff; font-size:1.1rem; margin-bottom:20px; font-family:var(--font-body); font-weight:600; text-transform:uppercase; letter-spacing:.08em; font-size:.8rem; opacity:.7;">Our Answers</h3>
+        <div class="answer-list">
+          <div class="answer-item">
+            <div class="answer-num">1</div>
+            <div>
+              <h4>Learner support line — not your problem</h4>
+              <p>Learners contact us directly. HR is not involved in 95% of cases. Technical issues are handled by our team, not yours.</p>
+            </div>
+          </div>
+          <div class="answer-item">
+            <div class="answer-num">2</div>
+            <div>
+              <h4>ROI reporting, built in</h4>
+              <p>Your central dashboard shows engagement, proficiency progress, and lesson completion — ready to present to your CEO without building it yourself.</p>
+            </div>
+          </div>
+          <div class="answer-item">
+            <div class="answer-num">3</div>
+            <div>
+              <h4>Learner success is our responsibility</h4>
+              <p>We schedule the first months of lessons for every learner. Our coordinators proactively chase engagement so you don't have to.</p>
+            </div>
+          </div>
+          <div class="answer-item">
+            <div class="answer-num">4</div>
+            <div>
+              <h4>One accountable partner — for everything</h4>
+              <p>App, live teaching, HR reporting, teacher management, and learner support. One relationship. One invoice. One person who picks up the phone.</p>
+            </div>
+          </div>
+          <div class="answer-item">
+            <div class="answer-num">5</div>
+            <div>
+              <h4>No switching headache — ever</h4>
+              <p>Our average partner stays 4.5 years. We make that easy through consistent people, quality, and communication from day one.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 4 – BABBEL PLATINUM PARTNER
+════════════════════════════════════════════════════════════ -->
+<section class="section" id="babbel">
+  <div class="container">
+
+    <div class="section-header">
+      <span class="eyebrow">Babbel Platinum Partner</span>
+      <h2 class="h2">The world's most trusted language app.<br>Now with expert human teaching.</h2>
+    </div>
+
+    <div class="babbel-intro">
+      <div>
+        <p class="lead">
+          Babbel is one of the most established names in language learning — founded 2007, trusted by over 2,000 companies worldwide. LearnCube Training is its exclusive Platinum Partner for corporate training.
+        </p>
+        <p style="margin-top:20px; color:var(--text-light); font-size:.95rem; line-height:1.75;">
+          Our live teaching materials are developed to complement what learners study in the Babbel app. Self-study reinforces the live training. The live training reinforces self-study. A loop that actually works. For HR, this means one central dashboard showing progress from both — no chasing two providers, no reconciling two reports.
+        </p>
+      </div>
+      <div class="babbel-stats-table">
+        <table>
+          <thead>
+            <tr><th>Metric</th><th style="text-align:right;">Value</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Users who improved proficiency within 2 months</td><td>92%</td></tr>
+            <tr><td>Companies worldwide that trust Babbel</td><td>2,000+</td></tr>
+            <tr><td>Languages available in the Babbel app</td><td>14</td></tr>
+            <tr><td>Years of instructional design expertise</td><td>17 years</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h3 class="h3" style="margin-bottom:24px;">The Complete Solution — App and Human, Working Together</h3>
+    <div class="features-grid">
+      <div class="feature-chip"><span class="feature-chip__dot"></span>Bite-sized Babbel lessons on mobile, anytime</div>
+      <div class="feature-chip"><span class="feature-chip__dot"></span>13,000+ hours of tailored learning content</div>
+      <div class="feature-chip"><span class="feature-chip__dot"></span>Content by 200+ expert linguists</div>
+      <div class="feature-chip"><span class="feature-chip__dot"></span>HR-level data — GDPR compliant</div>
+      <div class="feature-chip"><span class="feature-chip__dot"></span>Special pricing for existing Babbel customers</div>
+      <div class="feature-chip"><span class="feature-chip__dot"></span>White-label option — your brand in the classroom</div>
+      <div class="feature-chip"><span class="feature-chip__dot"></span>CEFR-aligned proficiency assessments included</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     CTA SECTION
+════════════════════════════════════════════════════════════ -->
+<section class="cta-section" id="book">
+  <div class="container" style="position:relative; z-index:1;">
+    <span class="eyebrow" style="color:var(--orange-light);">Get Started</span>
+    <h2 class="h2">Ready to meet the team<br>that knows your name?</h2>
+    <p>Book a 30-minute discovery call. No sales pitch — just an honest conversation about whether LearnCube Training is the right fit for your team.</p>
+    <div class="cta-row">
+      <a href="#" class="btn btn--primary">Book a Discovery Call</a>
+      <a href="#" class="btn btn--ghost-white">Download overview PDF</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <div class="footer__top">
+        <div class="footer__logo">
+          <div class="nav__logo-mark">LC</div>
+          LearnCube Training
+        </div>
+        <ul class="footer__links">
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#solution">The Solution</a></li>
+          <li><a href="#babbel">Babbel Case Study</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms &amp; Conditions</a></li>
+        </ul>
+      </div>
+      <div class="footer__bottom">
+        © 2026 LearnCube Training
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
